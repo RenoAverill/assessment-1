@@ -1,6 +1,6 @@
 # import unittest library
 import unittest
-import optimal_change
+from optimal_change import optimal_change
 
 
 class TestStringMethods(unittest.TestCase):
@@ -18,14 +18,11 @@ class TestStringMethods(unittest.TestCase):
     def test_is_string(self):
         end_statement = type(optimal_change(10,10)) == str
         self.assertTrue(end_statement)
-    # checks function within my method to see if the correct change is correct
-    def test_correct_change_amount(self):
-        change = optimal_change(10, 50).change_due(10, 50)
-        self.assertEqual(change, 40)
-    # tests the last puncuation of pennies Plural or Singular
-    def test_puncuation(self):
-        plural_pennies = optimal_change(10, 9.98)
-        self.assertEqual(plural_pennies, 'pennies')
+    # tests another output
+    def test_correct_result(self):
+        call = optimal_change(10, 11.23)
+        result ='The optimal change for an item that costs $10 with an amount paid of $11.23 is 1 $1 bill, 2 dimes, and 3 pennies.'
+        self.assertEqual(call, result)
 
 
 

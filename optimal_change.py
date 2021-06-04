@@ -1,48 +1,93 @@
-
+import math
 # Declare optimal_change function that takes in two params(item_cost, amount_paid)
 def optimal_change(item_cost, amount_paid):
 
-    # define a function to get total change that is due
-    def change_due(amount_paid, item_cost):
-         return amount_paid - item_cost
+    # define a varriable to get total change that is due
+    change_due = amount_paid - item_cost
 
     # define a result string 
-    end_of_transaction = ''
+    end_of_transaction = (f"The optimal change for an item that costs ${item_cost} with an amount paid of ${amount_paid} is ")
 
-# create a list of dictionaries for different dollars and coins with corresponding name
+# create a list of amount of money and count of how many
     money_list = [
-        {100: 'bill'},
-        {50: 'bill'},
-        {20: 'bill'},
-        {10: 'bill'},
-        {5: 'bill'},
-        {1: 'bill'},
-        {.25: 'quarter'},
-        {.10: 'dime'},
-        {.05: 'nickle'},
-        {.01: 'penny'}
+        [100, 0],
+        [50, 0],
+        [20, 0],
+        [10, 0],
+        [5, 0],
+        [1, 0],
+        [0.25, 0],
+        [0.10, 0],
+        [0.05, 0],
+        [0.01, 0]
     ]
+
     # create instance to see if money is still owed and inform buyer
-    while change_due() < 0:
+    if change_due < 0:
+
         # declare vairable for money that is still needed
         money_still_required = (item_cost - amount_paid)
         print (f"Please add ${money_still_required} to complete transaction!")
-    # loop through list
-    for money_obj, money in enumerate(money_list):
-        # declare vaiable for amount of money in each individual obj
-        amount = money_list[money_obj][0]
-        while change_due > amount:
-            # add amount to end_of_transaction report
-            end_of_transaction += amount
-            # subtract the amount of change that is due by the amount paid out to customer
+        return
+    
+
+    # # loop through list indexes and make and amount variable
+    for list in money_list:
+        amount = list[0]
+            
+        # count how many times a bill or coin is needed to be refunded
+        while round(change_due, 3) >= amount:
+            list[1] += 1
             change_due -= amount
-    # Print return string with optimal change w/ the following convention
-    print(end_of_transaction)
-print(optimal_change(62.13, 100))
 
+    # loop through money list and add correct puncuation to end statement
+    for list in money_list:
 
-# optimal_change(62.13, 100)
-# > "The optimal change for an item that costs $62.13 with an amount paid of $100 is 1 $20 bill, 1 $10 bill, 1 $5 bill, 2 $1 bills, 3 quarters, 1 dime, and 2 pennies."
+        # decalse singular and plural varriables to use later for correct puntuation
+        singular = list[1] == 1
+        plural = list[1] > 1
 
-# optimal_change(31.51, 50)
-# > "The optimal change for an item that costs $31.51 with an amount paid of $50 is 1 $10 bill, 1 $5 bill, 3 $1 bills, 1 quarter, 2 dimes, and 4 pennies."
+        # see if a bill or coin needs to be refunded
+        if list[1] > 0:
+            end_of_transaction += (f"{list[1]} ${list[0]} ")
+
+            # create a list compiled of values of their bills
+            list_of_bills = [100,50,20,10,5,1]
+
+            # create a list compiled of sub lists that have the values and names of coins
+            list_of_coins = [[0.25, 'quater'], [0.10, 'dime'], [0.05, 'nickle'], [0.01, 'penny']]
+
+            # 
+            if list[0] in list_of_bills:
+                if singular:
+                    end_of_transaction += 'bill, '
+                if plural:
+                    end_of_transaction += 'bills, '
+
+            # loop though and find what bill or coin is singular or plural
+            for coin_list in list_of_coins:
+                if list[0] in coin_list :
+                    if singular:
+                        if coin_list[0] == 0.25:
+                            end_of_transaction += 'quarter, '
+                        elif coin_list[0] == 0.10:
+                            end_of_transaction += 'dime, and '
+                        elif coin_list[0] == 0.05:
+                            end_of_transaction += 'nickle, '
+                        elif coin_list[0] == 0.01:
+                            end_of_transaction += 'penny.'
+                    if plural:
+                        if list[0] == 0.25:
+                            end_of_transaction += 'quarters, '
+                        elif list[0] == 0.10:
+                            end_of_transaction += 'dimes, and '
+                        elif list[0] == 0.05:
+                            end_of_transaction += 'nickles, '
+                        elif list[0] == 0.01:
+                            end_of_transaction += 'pennies.'
+
+       
+    
+    return(end_of_transaction.replace('$0.01 ','').replace('$0.05 ','').replace('$0.1 ','').replace('$0.25 ',''))
+
+# print(optimal_change(10, 11.23))
